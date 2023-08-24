@@ -1,6 +1,7 @@
 const express = require("express");
 const compress = require("./videoCompression");
 const fileUpload = require("./helper/fileUpload");
+const { uploadFile } = require("./s3");
 const PORT = 8080;
 
 const app = express();
