@@ -3,9 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>Video Compression</title>
   </head>
   <body>
-    <h1>Hello World!!</h1>
+    <h1 class="text-center text-2xl font-bold">Video Compression App</h1>
+    <form
+      action="/compress"
+      method="POST"
+      enctype="multipart/form-data"
+      class="flex items-center justify-center flex-col gap-2 mt-6"
+    >
+      <input
+        type="file"
+        name="video"
+        accept="video/*"
+        class="border border-black p-1 rounded w-[60vw]"
+      />
+
+      <button class="bg-indigo-500 hover:bg-indigo-600 p-1 rounded text-white">
+        Compress & Download
+      </button>
+    </form>
+
+    <script>
+      const preview = document.getElementById("preview");
+    </script>
   </body>
 </html>
