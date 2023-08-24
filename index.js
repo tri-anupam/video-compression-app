@@ -31,35 +31,41 @@ app.post("/upload", upload.single("video"), (req, res) => {
 
 //compress
 app.post("/compress", upload.single("video"), (req, res) => {
-  //   const inputPath = req.file.path;
-  //   const outputPath = `compressed-${Date.now()}.mp4`;
-  //   try {
-  //     const process = new ffmpeg();
-  //     process
-  //       .input(inputPath)
-  //       .output(outputPath)
-  //       .videoCodec("libx264")
-  //       .audioCodec("aac")
-  //       .audioBitrate("128k")
-  //       .on("end", () => {
-  //         res.download(outputPath, (err) => {
-  //           if (err) {
-  //             console.error("Error sending compressed file:", err);
-  //           }
-  //           // Clean up files
-  //           fs.unlinkSync(inputPath);
-  //           fs.unlinkSync(outputPath);
-  //         });
-  //       })
-  //       .run();
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-
   try {
-    console.log(req.file);
     if (!req.file) {
       return res.json({ success: false, message: "No file uploaded" });
+
+      const inputPath = path.join(__dirname, "uploads", req.file.filename);
+      const outputPath = path.join(
+        __dirname,
+        "compressed",
+        `compressed-${Date.now()}.mp4`
+      );
+
+      ffmpeg()
+        .input(inputPath)
+        .output(outputPath)
+        .videoCodec("libx264")
+        .audioCodec("aac")
+        .audioBitrate("128k")
+        .on("end", () => {
+          res.download(outputPath, (err) => {
+            if (err) {
+              console.error("Error sending compressed file:", err);
+            }
+            // Clean up files
+            fs.unlinkSync(inputPath);
+            fs.unlinkSync(outputPath);
+          });
+        })
+        .on("error", (err) => {
+          console.error("Error during compression:", err);
+          return res.json({
+            success: false,
+            message: "Error during compression.",
+          });
+        })
+        .run();
     }
   } catch (error) {
     console.log(error);
